@@ -11,6 +11,7 @@ import hudson.tasks.BuildStepDescriptor;
 import jenkins.tasks.SimpleBuildStep;
 import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.QueryParameter;
 
@@ -36,6 +37,7 @@ import java.io.IOException;
 public class HelloWorldBuilder extends Builder implements SimpleBuildStep {
 
     private final String name;
+    private long sleepTime;
 
     // Fields in config.jelly must match the parameter names in the "DataBoundConstructor"
     @DataBoundConstructor
@@ -50,8 +52,17 @@ public class HelloWorldBuilder extends Builder implements SimpleBuildStep {
         return name;
     }
 
+    @DataBoundSetter
+    public void setSleepTime(long sleepTime) {
+        this.sleepTime = sleepTime;
+    }
+
+    public long getSleepTime() {
+        return sleepTime;
+    }
+
     @Override
-    public void perform(Run<?,?> build, FilePath workspace, Launcher launcher, TaskListener listener) {
+    public void perform(Run<?,?> build, FilePath workspace, Launcher launcher, TaskListener listener) throws InterruptedException {
         // This is where you 'build' the project.
         // Since this is a dummy, we just say 'hello world' and call that a build.
 
@@ -60,6 +71,12 @@ public class HelloWorldBuilder extends Builder implements SimpleBuildStep {
             listener.getLogger().println("Bonjour, "+name+"!");
         else
             listener.getLogger().println("Hello, "+name+"!");
+
+        //sleep feature
+        if (sleepTime > 0) {
+            listener.getLogger().println("Sleeping for "+sleepTime/1000+" seconds!");
+            Thread.sleep(sleepTime);
+        }
     }
 
     // Overridden for better type safety.
