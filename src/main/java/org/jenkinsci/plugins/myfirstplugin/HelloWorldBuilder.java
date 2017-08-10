@@ -74,8 +74,8 @@ public class HelloWorldBuilder extends Builder implements SimpleBuildStep {
 
         //sleep feature
         if (sleepTime > 0) {
-            listener.getLogger().println("Sleeping for "+sleepTime/1000+" seconds!");
-            Thread.sleep(sleepTime);
+            listener.getLogger().println("Sleeping for "+sleepTime+" seconds!");
+            Thread.sleep(sleepTime*1000);
         }
     }
 
